@@ -8,7 +8,7 @@ lb_port=6443
 master1_ip=192.168.1.201
 master2_ip=192.168.1.202
 master3_ip=192.168.1.203
-worker1_ip=192.168.1.301
+worker1_ip=192.168.1.211
 
 #copy bashrc config
 sudo cp /home/vagrant/.bashrc /root/
@@ -30,7 +30,7 @@ backend be-apiserver
   option tcplog
   option tcp-check
   balance roundrobin
-  default_server inter 10s downiter 5s rise 2 fall 2 showstart 60s maxconn 250 maxqueue 256
+##default-server inter 10s downiter 5s rise 2 fall 2 showstart 60s maxconn 250 maxqueue 256
 
   server master1 $master1_ip:6443 check
   server master2 $master1_ip:6443 check

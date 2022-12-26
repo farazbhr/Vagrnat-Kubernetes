@@ -91,3 +91,4 @@ $worker1
 EOF
 
 #end
+#install CRI docker D https://devopstales.github.io/home/migrate-kubernetes-to-dockershim/
