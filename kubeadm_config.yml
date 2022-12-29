@@ -12,7 +12,7 @@ localAPIEndpoint:
   advertiseAddress: 192.168.1.201
   bindPort: 6443
 nodeRegistration:
-  criSocket: "unix:///run/containerd/containerd.sock"
+  criSocket: /var/run/dockershim.sock
   name: master1
   taints:
   - effect: NoSchedule
@@ -39,7 +39,7 @@ clusterName: kubernetes
 controllerManager: {}
 etcd:
   local:
-    imageRepository: quay.io/coreos/etcd
+    imageRepository: quay.io/coreos/
     imageTag: "v3.5.6"
     dataDir: /var/lib/etcd
     serverCertSANs:
@@ -64,8 +64,8 @@ etcd:
       - "master2"
       - "master3"
       - "worker1"
-kubernetesVersion: 1.26.0
-imageRepository: k8s.gcr.io
+kubernetesVersion: 1.22.17
+imageRepository: registry.k8s.io
 kind: ClusterConfiguration
 controlPlaneEndpoint: "192.168.1.100:6443"
 networking:

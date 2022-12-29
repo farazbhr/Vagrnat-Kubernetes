@@ -1,0 +1,81 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: m8v5qt.uhclwsswy69rvxia
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 192.168.1.201
+  bindPort: 6443
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: master1
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+---
+apiServer:
+  certSANs:
+    - 192.168.1.100
+    - 192.168.1.201
+    - 192.168.1.202
+    - 192.168.1.203
+    - 192.168.1.211
+    - lb.faraz
+    - master1
+    - master2
+    - master3
+    - worker1
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: cluster.local
+controlPlaneEndpoint: 192.168.1.100:6443
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+    imageRepository: quay.io/coreos
+    imageTag: v3.4.16
+    peerCertSANs:
+    - 192.168.1.100
+    - 192.168.1.201
+    - 192.168.1.202
+    - 192.168.1.203
+    - 192.168.1.211
+    - lb.faraz
+    - master1
+    - master2
+    - master3
+    - worker1
+    serverCertSANs:
+    - 192.168.1.100
+    - 192.168.1.201
+    - 192.168.1.202
+    - 192.168.1.203
+    - 192.168.1.211
+    - lb.faraz
+    - master1
+    - master2
+    - master3
+    - worker1
+
+imageRepository: registry.k8s.io
+kind: ClusterConfiguration
+kubernetesVersion: 1.22.17
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 192.168.0.0/16
+  serviceSubnet: 10.96.0.0/12
+scheduler:
+  extraArgs:
+    bind-address: 0.0.0.0
+    feature-gates: TTLAfterFinished=true

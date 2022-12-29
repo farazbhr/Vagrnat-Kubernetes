@@ -32,6 +32,24 @@ chmod g+rwx "$HOME/.docker" -R
 systemctl enable docker.service
 systemctl restart docker.service
 
+echo "****Dcoker Config****"
+sudo tee /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+systemctl daemon-reload
+systemctl restart docker
+
+
 # add sysctl setting
 echo "****Add sysctl setting****"
 cat >>/etc/sysctl.d/kubernetes.conf<<EOF
@@ -61,9 +79,9 @@ apt-get update -y
 
 # Install Kubernetes
 echo "*****Install Kubernetes kubeadm, kubelet and kubectl*****"
-apt-get install -y kubectl
-apt-get install -y kubectl
-apt-get install -y kubeadm
+apt-get install -y kubectl=1.22.17-00
+apt-get install -y kubectl=1.22.17-00
+apt-get install -y kubeadm=1.22.17-00
 
 # check versions
 kubelet --version
