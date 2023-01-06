@@ -4,9 +4,7 @@
 #This Script will install the basic tools needed for Kubernetes installation.
 
 #install ETCD
-ETCD_VER=v3.5.6
-
-
+ETCD_VER=v3.4.23
 GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
 DOWNLOAD_URL=${GITHUB_URL}
 

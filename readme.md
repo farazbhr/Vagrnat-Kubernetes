@@ -14,6 +14,9 @@
 #####Kubernetes
     kubectl get nodes
     kubectl get pod -A
+    kubectl get namespace
+    kubectl get service -A
+    kubectl get pod #shows pods in default namespace
 
 
 ######Change Kubernetes Version

@@ -16,10 +16,18 @@ docker pull k8s.gcr.io/kube-controller-manager:v1.26.0
 docker pull k8s.gcr.io/kube-scheduler:v1.26.0
 docker pull k8s.gcr.io/kube-proxy:v1.26.0
 docker pull k8s.gcr.io/pause:3.9
-docker pull quay.io/coreos/etcd/etcd:v3.5.6
+docker pull quay.io/coreos/etcd/etcd:v3.4.16
 docker pull k8s.gcr.io/coredns:v1.9.3
 docker pull calico/node:v3.18.6
 docker pull calico/kube-controllers:v3.18.6
+
+docker pull registry.k8s.io/kube-apiserver:v1.22.17
+docker pull registry.k8s.io/kube-controller-manager:v1.22.17
+docker pull registry.k8s.io/kube-scheduler:v1.22.17
+docker pull registry.k8s.io/kube-proxy:v1.22.17
+docker pull registry.k8s.io/pause:3.5
+docker pull quay.io/coreos/etcd:v3.4.16
+docker pull registry.k8s.io/coredns/coredns:v1.8.4
 
 #initialize master 1
 kubeadm init --config /opt/kubeadm_config.yml
@@ -44,6 +52,14 @@ scp -r root@192.168.1.201:/etc/kubernetes/pki /etc/kubernetes/
 
 
 #join master2
+#to create a new token, the old one xpires after 24 hours
+kubeadm token create --print-join-command
+kubeadm token list
+
+kubeadm join 192.168.1.100:6443 --token ahcvrm.ow0bsyrlgr2he90e \
+ --discovery-token-ca-cert-hash sha256:67381bcbe5c721f94abe46257b25f5d45f51b26093391c39dfa20bd94aaa5a0b \
+  --control-plane --apiserver-advertise-address 192.168.1.203 --v=5
+
 kubeadm join 192.168.1.100:6443 --token m8v5qt.uhclwsswy69rvxia \
  --discovery-token-ca-cert-hash sha256:67381bcbe5c721f94abe46257b25f5d45f51b26093391c39dfa20bd94aaa5a0b \
   --control-plane --apiserver-advertise-address 192.168.1.202
@@ -52,6 +68,120 @@ kubeadm join 192.168.1.100:6443 --token m8v5qt.uhclwsswy69rvxia \
 kubeadm join 192.168.1.100:6443 --token m8v5qt.uhclwsswy69rvxia \
  --discovery-token-ca-cert-hash sha256:67381bcbe5c721f94abe46257b25f5d45f51b26093391c39dfa20bd94aaa5a0b \
   --control-plane --apiserver-advertise-address 192.168.1.203
+
+#install etcd
+
+
+# on master node we check the etcd server
+export endpiont="https://192.168.1.201:2379,192.168.1.202:2379,192.168.1.203:2379"
+export flags="--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+              --cert=/etc/kubernetes/pki/etcd/server.crt \
+              --key=/etc/kubernetes/pki/etcd/server.key"
+endpoints=$(sudo ETCDCTL_API=3 etcdctl member list $flags --endpoints=${endpoint} \
+            --write-out=json | jq -r '.members | map(.clientURLs) | add | join(",")')
+
+
+# Verify
+sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} member list
+sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} endpoint status
+sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} endpoint health
+sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} alarm list
+sudo ETCDCTL_API=3 etcdctl $flags --endpionts=${endpoint} get / --prefix --keys-only --limit
+
+
+# Accessing the Dashboard UI
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl get namespace
+
+# change ClusterIP to NodePort Service
+kubectl patch svc -n kubernetes-dashboard kubernetes-dashboard --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'
+
+kubectl get service -A
+
+#Get node port assaign to a service
+kubectl get services -n kubernetes-dashboard kubernetes-dashboard -o go-template='{{(index .spec.ports 0).nodePoert}}'
+
+# create service account
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
+
+# define ClusterRoleBinding
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
+
+#Getting a Bearer Token
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+
+# describe a pod situation
+kubectl -n kubernetes-dashboard describe pod
+
+#get all
+kubectl -n kubernetes-dashboard get all
+
+# pods in default namespace
+kubectl get pod
+
+# describe a pod
+kubectl describe pod web-65856fb89b-5ptq2
+
+#create pod - not recommended
+kubectl run nginx --image nginx:alpine
+
+# our kubelet manifests - static pods
+ls /etc/kubernetes/manifests/
+
+kubectl get replicasets.app
+kubectl get deployments.app
+
+#edit deployment web
+kubectl edit deployments.apps web
+
+# delete pod
+kubectl delete pod nginx
+
+kubectl get namespace
+
+kubectl get daemonsets.apps -A
+
+kubectl get configmap -A
+
+ubectl describe -n kube-system configmaps calico-config
+
+kubectl get pod -A -o wide
+kubectl get pod,service,deployment,cm -n kube-system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
