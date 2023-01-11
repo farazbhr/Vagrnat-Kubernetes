@@ -169,9 +169,19 @@ kubectl get pod -A -o wide
 kubectl get pod,service,deployment,cm -n kube-system
 
 
+#kubectl bash auto completion
+source /usr/share/bash-completion/bash_completion
+kubectl completion bash > /etc/bash_completion.d/kubectl
+source /etc/bash_completion.d/kubectl
 
+#manifest
+k get pod kube-proxy-dzwd9 -o yaml
 
+#edit a pod
+kubectl edit pod simple
 
+#get the nodes
+kubectl get nodes
 
 
 
