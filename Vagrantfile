@@ -27,7 +27,7 @@ Vagrant.configure(2) do |config|
       masternode.vm.network "private_network", ip: "192.168.1.20#{master_vm_id}"
       masternode.vm.provider "virtualbox" do |v|
         v.name = "master#{master_vm_id}"
-        v.memory = 2024
+        v.memory = 2048
         v.cpus = 2
       end
       masternode.vm.provision "shell", path: "bootstrap_t1.sh"
@@ -43,7 +43,7 @@ Vagrant.configure(2) do |config|
       workernode.vm.network "private_network", ip: "192.168.1.21#{worker_vm_id}"
       workernode.vm.provider "virtualbox" do |v|
         v.name = "worker#{worker_vm_id}"
-        v.memory = 1024
+        v.memory = 1500
         v.cpus = 1
       end
     end

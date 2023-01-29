@@ -20,3 +20,16 @@ kubectl edit nodes master3
 #create pvc
 kubectl create -f pvc.yml
 kubectl get pvc
+
+#get endpoint
+kubectl get endpoints
+
+#scale up
+k scale --replicas=2 replicaset wordpress-5994d99f46
+
+#kubectl access
+kubectl auth can-i delete pod
+
+#To mark a Node unschedulable, run:
+
+kubectl cordon $NODENAME
