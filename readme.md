@@ -43,3 +43,13 @@
 virtual machines, and native host-based workloads. Calico supports a broad range of 
 platforms including Kubernetes, OpenShift, Docker EE, OpenStack, and bare metal services.</p>
 ```
+
+- Monitoring
+```bash
+watch kubectl get pod,rs -o wide
+```
+- kubectl convert
+- You can use kubectl convert to update manifest files to use a different API version. 
+```bash
+kubectl convert -f ./deployment.yml --output-version rbac.authorization.k8s.io/v1
+```

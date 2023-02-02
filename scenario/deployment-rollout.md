@@ -55,3 +55,7 @@ kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=
 ```bash
 kubectl describe deployment nginx-deployment
 ```
+- Get back to the last version, because our current version encountered problems
+```bash
+kubectl rollout undo deployment nginx-deployment
+```

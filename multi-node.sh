@@ -73,7 +73,7 @@ kubeadm join 192.168.1.100:6443 --token m8v5qt.uhclwsswy69rvxia \
 
 
 # on master node we check the etcd server
-export endpiont="https://192.168.1.201:2379,192.168.1.202:2379,192.168.1.203:2379"
+export endpoint="https://192.168.1.201:2379,192.168.1.202:2379,192.168.1.203:2379"
 export flags="--cacert=/etc/kubernetes/pki/etcd/ca.crt \
               --cert=/etc/kubernetes/pki/etcd/server.crt \
               --key=/etc/kubernetes/pki/etcd/server.key"
@@ -87,7 +87,8 @@ sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} endpoint status
 sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} endpoint health
 sudo ETCDCTL_API=3 etcdctl $flags --endpoints=${endpoints} alarm list
 sudo ETCDCTL_API=3 etcdctl $flags --endpionts=${endpoint} get / --prefix --keys-only --limit
-
+etcdctl member list $flags --endpoints=${endpoint} --write-out=table
+etcdctl endpoint status $flags --endpoints=${endpoint} --write-out=table
 
 # Accessing the Dashboard UI
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml

@@ -28,7 +28,7 @@ Vagrant.configure(2) do |config|
       masternode.vm.provider "virtualbox" do |v|
         v.name = "master#{master_vm_id}"
         v.memory = 2048
-        v.cpus = 2
+        v.cpus = 3
       end
       masternode.vm.provision "shell", path: "bootstrap_t1.sh"
     end
@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
       workernode.vm.provider "virtualbox" do |v|
         v.name = "worker#{worker_vm_id}"
         v.memory = 1500
-        v.cpus = 1
+        v.cpus = 2
       end
     end
   end
