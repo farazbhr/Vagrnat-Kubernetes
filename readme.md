@@ -53,3 +53,15 @@ watch kubectl get pod,rs -o wide
 ```bash
 kubectl convert -f ./deployment.yml --output-version rbac.authorization.k8s.io/v1
 ```
+
+- View kube controller option
+```bash
+cat /etc/kubernetes/manifests/kube-controller-manager.yaml
+```
+
+
+- Install helm
+  https://helm.sh/docs/intro/install/
+
+- Install Loki
+https://www.scaleway.com/en/docs/tutorials/manage-k8s-logging-loki/

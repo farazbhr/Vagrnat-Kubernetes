@@ -223,3 +223,26 @@ Then you can join any number of worker nodes by running the following on each as
 
 kubeadm join 192.168.1.100:6443 --token m8v5qt.uhclwsswy69rvxia \
 	--discovery-token-ca-cert-hash sha256:67381bcbe5c721f94abe46257b25f5d45f51b26093391c39dfa20bd94aaa5a0b
+-----------
+ck
+W0206 12:37:18.365911  133424 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+
+W0206 12:37:18.752175  133424 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+
+NAME: loki-grafana
+LAST DEPLOYED: Mon Feb  6 12:37:16 2023
+NAMESPACE: loki-stack
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get your 'admin' user password by running:
+
+   kubectl get secret --namespace loki-stack loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+   loki-grafana.loki-stack.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+     export POD_NAME=$(kubectl get pods --namespace loki-stack -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=loki-grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace loki-stack port-forward $POD_NAME 3000
+
+3. Login with the password from step 1 and the username: admin
