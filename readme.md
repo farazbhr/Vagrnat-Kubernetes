@@ -22,6 +22,7 @@
     kubectl get namespace
     kubectl get service -A
     kubectl get pod #shows pods in default namespace
+    kubectl -n research get pods #shows pods in research namespace
 ```
 
 - Change Kubernetes Version
