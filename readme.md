@@ -1,4 +1,4 @@
-###Commands
+### Commands
 
 - vagrant
 ```bash
@@ -58,6 +58,57 @@ kubectl convert -f ./deployment.yml --output-version rbac.authorization.k8s.io/v
 - View kube controller option
 ```bash
 cat /etc/kubernetes/manifests/kube-controller-manager.yaml
+```
+
+- In some cases, you may need to update resource fields that 
+cannot be updated once initialized, or you may want to make a 
+recursive change immediately, such as to fix broken pods created by a Deployment.
+To change such fields, use replace --force, which deletes and re-creates the resource.
+In this case, you can modify your original configuration file
+```bash
+kubectl replace -f https://k8s.io/examples/application/nginx/nginx-deployment.yaml --force
+```
+
+- Check image
+```bash
+kubectl describe pod -n kube-system kube-scheduler-controlplane | grep image
+```
+
+#### difference between comand filed in docker and a pod:
+```bash
+entrypoint [sleep] is command:["sleep2.0"]
+CMD ["5"] is args:["10"]
+
+---
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: ubuntu-sleeper-2 
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu
+    command:
+      - "sleep"
+      - "5000"
+---
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: webapp-green
+  labels:
+      name: webapp-green 
+spec:
+  containers:
+  - name: simple-webapp
+    image: kodekloud/webapp-color
+    args: ["--color", "green"]
+```
+
+- Bash base64 encode and decode
+```bash
+echo  'linuxhint.com' | base64
+echo 'bGludXhoaW50LmNvbQo=' | base64 --decode
 ```
 
 
