@@ -23,6 +23,10 @@
     kubectl get service -A
     kubectl get pod #shows pods in default namespace
     kubectl -n research get pods #shows pods in research namespace
+    kubectl -n elastic-stack exec -it app -- cat /log/app.log #check anything inside the container
+    kubectl get pod orange -o yaml > /root/orange.yaml #extract the yaml file
+    kubectl describe node controlplane | grep -i  taint #check taints on a node
+    kubectl config view # check the number of clusters
 ```
 
 - Change Kubernetes Version
@@ -35,6 +39,13 @@
     apt install kubelet=1.22.17-00
     apt install kubectl=1.22.17-00
     kubeadm version
+```
+
+- Changes in node
+```bash
+kubectl drain node1 #termintane pod on the node and make unschedulable
+kubectl cordon node1 #make unschedulable without terminating the pods
+kubectl uncorodn node1 #make pod schedulable again
 ```
 
 - Calico
@@ -111,6 +122,9 @@ echo  'linuxhint.com' | base64
 echo 'bGludXhoaW50LmNvbQo=' | base64 --decode
 ```
 
+
+- Encrypting ETCD secret data at Rest
+  https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
 
 - Install helm
   https://helm.sh/docs/intro/install/

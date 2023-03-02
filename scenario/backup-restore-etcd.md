@@ -1,7 +1,19 @@
 
 
 
-## Connection etcd
+## Back up and Scenario
+kubectl -n kube-system logs etcd-controlplane | grep -i 'etcd-version'
+
+### Check Etcd Version
+```bash 
+kubectl -n kube-system logs etcd-controlplane | grep -i 'etcd-version'
+```
+
+### Check Etcd YAML configuration
+```bash 
+vi /etc/kubernetes/manifests/etcd.yaml
+```
+
 ### Install etcdctl On Ubuntu 16.04/18.04
 ```bash
 etcd_version=v3.4.16
@@ -15,6 +27,15 @@ etcdctl version
 ### Get etcd information
 ```bash 
 kubectl describe pod etcd-master -n kube-system
+```
+
+### How to backup ETCD using snapshot
+```bash 
+ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /opt/snapshot-pre-boot.db
 ```
 ### check etcd server on master nodes
 ```bash
