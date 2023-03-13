@@ -122,6 +122,12 @@ echo  'linuxhint.com' | base64
 echo 'bGludXhoaW50LmNvbQo=' | base64 --decode
 ```
 
+- role based access controlls
+```bash
+echo  'linuxhint.com' | base64
+echo 'bGludXhoaW50LmNvbQo=' | base64 --decode
+```
+
 
 - Encrypting ETCD secret data at Rest
   https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
