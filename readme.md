@@ -27,6 +27,7 @@
     kubectl get pod orange -o yaml > /root/orange.yaml #extract the yaml file
     kubectl describe node controlplane | grep -i  taint #check taints on a node
     kubectl config view # check the number of clusters
+    kubectl get networkpolicy #get network policies
 ```
 
 - Change Kubernetes Version
