@@ -79,9 +79,9 @@ apt-get update -y
 
 # Install Kubernetes
 echo "*****Install Kubernetes kubeadm, kubelet and kubectl*****"
-apt-get install -y kubectl=1.22.17-00
-apt-get install -y kubectl=1.22.17-00
-apt-get install -y kubeadm=1.22.17-00
+apt-get install -y kubectl=1.26.0-00
+apt-get install -y kubelet=1.26.0-00
+apt-get install -y kubeadm=1.26.0-00
 
 # check versions
 kubelet --version

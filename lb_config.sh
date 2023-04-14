@@ -13,7 +13,7 @@ worker1_ip=192.168.1.211
 #copy bashrc config
 sudo cp /home/vagrant/.bashrc /root/
 
-#commands
+#jsonpath-commands
 
 sudo apt-get install haproxy -y
 
